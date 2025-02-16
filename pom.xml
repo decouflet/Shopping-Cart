@@ -7,7 +7,6 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>3.4.2</version>
-    <relativePath/>
   </parent>
 
   <groupId>com.myapp</groupId>
@@ -15,6 +14,12 @@
   <version>1.0-SNAPSHOT</version>
 
   <name>shopping-cart</name>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>msvc-cart</module>
+    <module>msvc_product</module>
+  </modules>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
