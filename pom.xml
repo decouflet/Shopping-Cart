@@ -19,6 +19,7 @@
   <modules>
     <module>msvc-cart</module>
     <module>msvc_product</module>
+    <module>msvc_user</module>
   </modules>
 
   <properties>
