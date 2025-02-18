@@ -1,12 +1,16 @@
 package com.microservice.cart.msvc_cart.service;
 
+import com.microservice.cart.msvc_cart.DTOs.ProductDTO;
 import com.microservice.cart.msvc_cart.entities.Cart;
 import com.microservice.cart.msvc_cart.entities.CartProduct;
+import com.microservice.cart.msvc_cart.entities.CartProductId;
 import com.microservice.cart.msvc_cart.persistence.CartProductRepository;
 import com.microservice.cart.msvc_cart.persistence.CartRepository;
+import com.microservice.cart.msvc_cart.productClient.ProductClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.Console;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +22,9 @@ public class CartServiceImpl implements CartService {
 
     @Autowired
     private CartProductRepository cartProductRepository;
+
+    @Autowired
+    private ProductClient productClient;
 
     @Override
     public List<Cart> findAll() {
@@ -45,34 +52,40 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartProduct addProductToCart(Long cartId, Long productId, int quantity) {
-        Cart cart = cartRepository.findById(cartId)
-                .orElseThrow(() -> new RuntimeException("Did not find cart with id: " + cartId));
+    public CartProduct addProductToCart(Long cart_id, Long product_id, int quantity) {
+        Cart cart = cartRepository.findById(cart_id)
+                .orElseThrow(() -> new RuntimeException("Did not find cart with id: " + cart_id));
 
-        // Verificar si el producto existe a traves de una llamada de productClient
-
-        Optional<CartProduct> existingCartProduct = cartProductRepository.findByCartIdAndProductId(cartId, productId);
-
-        if (existingCartProduct.isPresent()) {
-            CartProduct cartProduct = existingCartProduct.get();
-            cartProduct.setQuantity(cartProduct.getQuantity() + quantity);
-            return cartProductRepository.save(cartProduct);
-        } else {
-            CartProduct cartProduct = new CartProduct();
-            cartProduct.setCart(cart);
-            cartProduct.setProductId(productId);
-            cartProduct.setQuantity(quantity);
-            return cartProductRepository.save(cartProduct);
+        ProductDTO productDTO = productClient.findProductById(product_id);
+        if (productDTO == null) {
+            throw new RuntimeException("Did not find product with id: " + product_id);
         }
+
+        Optional<CartProduct> existingCartProduct = cartProductRepository.findByCartIdAndProductId(cart_id, product_id);
+
+        CartProductId cartProductId = new CartProductId(cart_id, product_id);
+
+        CartProduct cartProduct;
+        if (existingCartProduct.isPresent()) {
+            cartProduct = existingCartProduct.get();
+            cartProduct.setQuantity(cartProduct.getQuantity() + quantity);
+        } else {
+            cartProduct = new CartProduct();
+            cartProduct.setCart(cart);
+            cartProduct.setProductId(product_id);
+            cartProduct.setQuantity(quantity);
+            cartProduct.setId(cartProductId);
+        }
+        return cartProductRepository.save(cartProduct);
     }
 
     @Override
-    public void removeProductFromCart(Long cartId, Long productId, int quantity) {
-        Cart cart = cartRepository.findById(cartId)
-                .orElseThrow(() -> new RuntimeException("Cart with id: " + cartId + " not found"));
+    public void removeProductFromCart(Long cart_id, Long product_id, int quantity) {
+        cartRepository.findById(cart_id)
+                .orElseThrow(() -> new RuntimeException("Cart with id: " + cart_id + " not found"));
 
-        CartProduct cartProduct = cartProductRepository.findByCartIdAndProductId(cartId, productId)
-                .orElseThrow(() -> new RuntimeException("Product with id: " + productId + " not found"));
+        CartProduct cartProduct = cartProductRepository.findByCartIdAndProductId(cart_id, product_id)
+                .orElseThrow(() -> new RuntimeException("Product with id: " + product_id + " not found"));
 
         if (cartProduct.getQuantity() > quantity) {
             cartProduct.setQuantity(cartProduct.getQuantity() - quantity);

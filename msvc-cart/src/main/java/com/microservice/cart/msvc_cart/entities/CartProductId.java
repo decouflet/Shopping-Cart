@@ -9,8 +9,8 @@ import java.io.Serializable;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Embeddable
 @Data
+@Embeddable
 public class CartProductId implements Serializable {
     private Long cartId;
     private Long productId;

@@ -20,8 +20,9 @@ public class CartController {
     CartService cartService;
 
     @PostMapping("/create")
-    public void saveCart(@RequestBody Cart cart) {
+    public String saveCart(@RequestBody Cart cart) {
         cartService.save(cart);
+        return "Cart created successfully";
     }
 
     @GetMapping("/all")
@@ -45,8 +46,9 @@ public class CartController {
     }
 
     @DeleteMapping("/delete")
-    public void deleteById(@RequestParam("id") Long id){
+    public String deleteById(@RequestParam("id") Long id){
         cartService.deleteById(id);
+        return "Cart deleted successfully";
     }
 
     @PutMapping("/add-product")

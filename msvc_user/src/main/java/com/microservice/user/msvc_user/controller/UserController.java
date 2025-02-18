@@ -14,7 +14,7 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/create")
-    public void saveCart(@RequestBody User user) {
+    public void saveUser(@RequestBody User user) {
         userService.save(user);
     }
 
