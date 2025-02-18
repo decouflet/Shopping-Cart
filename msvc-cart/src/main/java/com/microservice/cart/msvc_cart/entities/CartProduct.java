@@ -1,5 +1,6 @@
 package com.microservice.cart.msvc_cart.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,10 +15,12 @@ public class CartProduct {
     @ManyToOne
     @MapsId("cartId")
     @JoinColumn(name = "cart_id")
+    @JsonIgnore
     private Cart cart;
 
     @Column(insertable=false, updatable=false)
-    private Long productId;  // Solo guarda el ID del producto, sin relación con `Product`
+    @JoinColumn(name = "product_id")
+    private Long productId;
 
     private int quantity;
 
