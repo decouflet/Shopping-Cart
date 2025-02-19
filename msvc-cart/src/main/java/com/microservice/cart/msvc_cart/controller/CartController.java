@@ -1,16 +1,14 @@
 package com.microservice.cart.msvc_cart.controller;
 
 
-import com.microservice.cart.msvc_cart.DTOs.CartDTO;
+import com.microservice.cart.msvc_cart.DTOs.CartWithCredentials;
 import com.microservice.cart.msvc_cart.entities.Cart;
-import com.microservice.cart.msvc_cart.entities.CartProduct;
 import com.microservice.cart.msvc_cart.service.CartService;
-import org.antlr.v4.runtime.misc.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/api/cart")
@@ -20,9 +18,9 @@ public class CartController {
     CartService cartService;
 
     @PostMapping("/create")
-    public String saveCart(@RequestBody Cart cart) {
-        cartService.save(cart);
-        return "Cart created successfully";
+    public String saveCart(@RequestBody CartWithCredentials cartWithCredentials) {
+        cartService.save(cartWithCredentials);
+        return "Cart created successfully and was added to the user: " + cartWithCredentials.getName();
     }
 
     @GetMapping("/all")
@@ -71,5 +69,16 @@ public class CartController {
             return e.getMessage();
         }
         return "Product subtracted or deleted successfully";
+    }
+
+    @PutMapping("/pay")
+    public String pay(@RequestParam Long id_cart) {
+        cartService.payCart(id_cart);
+        return "Cart paid successfully";
+    }
+
+    @GetMapping("/cost")
+    public BigDecimal cost(@RequestParam Long id_cart) {
+        return cartService.cost(id_cart);
     }
 }

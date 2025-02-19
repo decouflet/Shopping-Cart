@@ -1,4 +1,4 @@
-package com.microservice.cart.msvc_cart.productClient;
+package com.microservice.cart.msvc_cart.clients;
 
 import com.microservice.cart.msvc_cart.DTOs.ProductDTO;
 import org.springframework.cloud.openfeign.FeignClient;

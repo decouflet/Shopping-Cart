@@ -6,12 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Entity //porque es una entidad de JPA
+@Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,6 +26,12 @@ public class Cart {
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartProduct> cartProducts = new ArrayList<>();
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDate createdAt = LocalDate.now();
+
+    private boolean pay = false;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "cart_type", nullable = false)
+    private CartType cartType;
 
 }

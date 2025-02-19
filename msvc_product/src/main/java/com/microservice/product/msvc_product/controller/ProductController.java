@@ -35,6 +35,7 @@ public class ProductController {
         try {
             Product product = productService.findById(id);
             ProductDTO productDTO = new ProductDTO();
+            productDTO.setId(product.getId());
             productDTO.setName(product.getName());
             productDTO.setPrice(product.getPrice());
             return productDTO;
