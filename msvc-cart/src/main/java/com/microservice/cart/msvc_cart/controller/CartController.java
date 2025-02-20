@@ -3,13 +3,15 @@ package com.microservice.cart.msvc_cart.controller;
 
 import com.microservice.cart.msvc_cart.DTOs.CartWithCredentials;
 import com.microservice.cart.msvc_cart.entities.Cart;
+import com.microservice.cart.msvc_cart.responses.MessageNumberResponse;
+import com.microservice.cart.msvc_cart.responses.MessageResponse;
 import com.microservice.cart.msvc_cart.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/cart")
 public class CartController {
@@ -18,9 +20,11 @@ public class CartController {
     CartService cartService;
 
     @PostMapping("/create")
-    public String saveCart(@RequestBody CartWithCredentials cartWithCredentials) {
-        cartService.save(cartWithCredentials);
-        return "Cart created successfully and was added to the user: " + cartWithCredentials.getName();
+    public Cart saveCart(@RequestBody CartWithCredentials cartWithCredentials, @RequestParam Long cart_id) {
+        if (cart_id > 0) {
+            cartService.deleteById(cart_id);
+        }
+        return cartService.save(cartWithCredentials);
     }
 
     @GetMapping("/all")
@@ -44,41 +48,56 @@ public class CartController {
     }
 
     @DeleteMapping("/delete")
-    public String deleteById(@RequestParam("id") Long id){
-        cartService.deleteById(id);
-        return "Cart deleted successfully";
+    public MessageResponse deleteById(@RequestParam("id") Long id){
+        try {
+            cartService.deleteById(id);
+        } catch (Exception e) {
+            return new MessageResponse(true, e.getMessage());
+        }
+        return new MessageResponse(false, "Cart deleted successfully");
     }
 
     @PutMapping("/add-product")
-    public String addProduct(@RequestParam Long id_cart, @RequestParam Long id_product, @RequestParam int quantity) {
+    public MessageResponse addProduct(@RequestParam Long id_cart, @RequestParam Long id_product, @RequestParam int quantity) {
         try {
         cartService.addProductToCart(id_cart, id_product, quantity);
         } catch (Exception e) {
-            return e.getMessage();
+            return new MessageResponse(true, e.getMessage());
         }
-        return "Product added successfully";
+        return new MessageResponse(false, "Product added sucessfully");
     }
 
     @DeleteMapping("/remove-or-delete-product")
-    public String removeOrDeleteProduct(@RequestParam Long id_cart,
+    public MessageResponse removeOrDeleteProduct(@RequestParam Long id_cart,
                                         @RequestParam Long id_product,
                                         @RequestParam int quantity) {
         try {
             cartService.removeProductFromCart(id_cart, id_product, quantity);
         } catch (Exception e) {
-            return e.getMessage();
+            return new MessageResponse(true, e.getMessage());
         }
-        return "Product subtracted or deleted successfully";
+        return new MessageResponse(false, "Product subtracted or deleted successfully");
     }
 
     @PutMapping("/pay")
-    public String pay(@RequestParam Long id_cart) {
-        cartService.payCart(id_cart);
-        return "Cart paid successfully";
+    public MessageResponse pay(@RequestParam Long id_cart) {
+        try {
+            cartService.payCart(id_cart);
+        } catch (Exception e) {
+            return new MessageResponse(true, e.getMessage());
+        }
+
+        return new MessageResponse(false, "Cart paid successfully");
     }
 
     @GetMapping("/cost")
-    public BigDecimal cost(@RequestParam Long id_cart) {
-        return cartService.cost(id_cart);
+    public MessageNumberResponse cost(@RequestParam Long id_cart) {
+        BigDecimal cost = BigDecimal.ZERO;
+        try {
+            cost = cartService.cost(id_cart);
+        } catch (Exception e) {
+            return new MessageNumberResponse(true, e.getMessage(), BigDecimal.ZERO);
+        }
+        return new MessageNumberResponse(false, "Cost calculated su", cost);
     }
 }

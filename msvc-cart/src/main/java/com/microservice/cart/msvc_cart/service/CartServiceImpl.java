@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -67,13 +68,13 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void save(CartWithCredentials cartWithCredentials) {
+    public Cart save(CartWithCredentials cartWithCredentials) {
         UserDTO userDTO = userClient.findByNameAndPassword(cartWithCredentials.getName(), cartWithCredentials.getPassword());
         if (userDTO == null) {
             throw new RuntimeException("Did not find user with this credentials");
         }
 
-        Cart cart = Cart.builder().userId(userDTO.getId()).createdAt(LocalDate.now()).build();
+        Cart cart = Cart.builder().userId(userDTO.getId()).createdAt(LocalDate.now()).cartProducts(new ArrayList<>()).build();
 
         if (userDTO.isVip()) {
             cart.setCartType(CartType.Vip);
@@ -83,7 +84,7 @@ public class CartServiceImpl implements CartService {
             }
         }
         System.out.println(cart);
-        cartRepository.save(cart);
+        return cartRepository.save(cart);
     }
 
     @Override

@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/product")
 public class ProductController {
@@ -21,8 +25,8 @@ public class ProductController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<?> findAll(){
-        return ResponseEntity.ok(productService.findAll());
+    public List<Product> findAll(){
+        return productService.findAll();
     }
 
     @GetMapping("/search")

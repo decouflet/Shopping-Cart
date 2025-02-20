@@ -12,7 +12,7 @@ public interface CartService {
     List<Cart> findAll();
     List<CartProduct> findAllProducts();
     Cart findById(Long id);
-    void save(CartWithCredentials cartWithCredentials);
+    Cart save(CartWithCredentials cartWithCredentials);
     void deleteById(Long id);
     CartProduct addProductToCart(Long cartId, Long productId, int quantity);
     void removeProductFromCart(Long cartId, Long productId, int quantity);

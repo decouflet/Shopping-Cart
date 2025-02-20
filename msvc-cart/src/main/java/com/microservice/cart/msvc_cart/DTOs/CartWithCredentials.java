@@ -15,8 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class CartWithCredentials {
-    private List<CartProduct> cartProducts = new ArrayList<>();
-    private LocalDate createdAt = LocalDate.now();
     private String name;
     private String password;
 }
