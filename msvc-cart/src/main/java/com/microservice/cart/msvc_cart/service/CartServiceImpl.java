@@ -81,6 +81,8 @@ public class CartServiceImpl implements CartService {
         } else {
             if (cart.getCreatedAt().isEqual(LocalDate.parse(this.currentDay))) {
                 cart.setCartType(CartType.Promotional);
+            } else {
+                cart.setCartType(CartType.Standard);
             }
         }
         System.out.println(cart);
