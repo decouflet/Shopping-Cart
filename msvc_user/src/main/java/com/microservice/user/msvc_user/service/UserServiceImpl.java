@@ -46,6 +46,11 @@ public class UserServiceImpl implements UserService {
             System.out.println(user_id);
             User user = userRepository.findById(user_id).orElseThrow();
             user.setSpent(cartAmount.add(user.getSpent()));
+
+            if (user.getSpent().compareTo(BigDecimal.valueOf(10000)) > 0) {
+                user.setVip(true);
+            }
+
             userRepository.save(user);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());

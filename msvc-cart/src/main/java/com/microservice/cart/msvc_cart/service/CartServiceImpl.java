@@ -25,8 +25,8 @@ import java.util.Optional;
 @Service
 public class CartServiceImpl implements CartService {
 
-    @Value("${cart.current.day}")
-    private String currentDay;
+    @Value("${cart.promotional.day}")
+    private String promotionalDay;
 
     @Value("${cart.discount.vip}")
     private BigDecimal discountVip;
@@ -79,7 +79,7 @@ public class CartServiceImpl implements CartService {
         if (userDTO.isVip()) {
             cart.setCartType(CartType.Vip);
         } else {
-            if (cart.getCreatedAt().isEqual(LocalDate.parse(this.currentDay))) {
+            if (cart.getCreatedAt().isEqual(LocalDate.parse(this.promotionalDay))) {
                 cart.setCartType(CartType.Promotional);
             } else {
                 cart.setCartType(CartType.Standard);
