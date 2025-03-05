@@ -148,6 +148,16 @@ public class CartServiceImpl implements CartService {
         Cart cart = cartRepository.findById(id).orElseThrow();
         cart.setPay(true);
         cartRepository.save(cart);
+
+        BigDecimal cost = this.cost(id);
+
+        System.out.println("user id: " + cart.getUserId());
+        if (cost.signum() > 0) {
+            userClient.addSpent(cost, cart.getUserId());
+        } else {
+            throw new RuntimeException("Can't purchase empty cart");
+        }
+
     }
 
     @Override

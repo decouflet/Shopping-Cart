@@ -5,6 +5,7 @@ import com.microservice.user.msvc_user.persistence.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -36,5 +37,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByNameAndPassword(String name, String password) {
         return userRepository.findByNameAndPassword(name, password);
+    }
+
+    @Override
+    public void addSpent(BigDecimal cartAmount, Long user_id) {
+        try {
+            System.out.println(cartAmount);
+            System.out.println(user_id);
+            User user = userRepository.findById(user_id).orElseThrow();
+            user.setSpent(cartAmount.add(user.getSpent()));
+            userRepository.save(user);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }
