@@ -21,7 +21,6 @@ public class Product {
 
     private String name;
     private BigDecimal price;
-
-    // Getters y Setters
+    private String category;
 }
 
