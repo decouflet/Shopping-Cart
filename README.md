@@ -1,4 +1,4 @@
-# Proyecto Shopping-Cart Backend y Frontend
+# Proyecto Shopping-Cart 2.0 Backend y Frontend
 
 ## Versiones Utilizadas
 
@@ -63,6 +63,20 @@ Para mejorar la arquitectura del proyecto, se sugieren las siguientes mejoras:
 ## Recursos Adicionales
 
 - **Collection de Postman**: Se adjunta la colección de Postman.
+
+
+## Mejoras version 2.0
+Los cambios que se hicieron fueron enfocados en el FrontEnd para optimizar su funcionalidad y mejorar la experiencia de usuario:
+
+✔ Búsqueda de productos: Se agregó un buscador en el header para filtrar productos en tiempo real.
+✔ Categorías de productos: Se implementó un dropdown en el header con categorías para filtrar productos.
+✔ Listado de compras en el header: Se añadió la funcionalidad del despliegue de un listado con los productos agregados, sus cantidades, precio y el total del costo del carrito en tiempo real (se movió la funcionalidad del boton 'cart cost' a esta seccion).
+✔ Paginación de productos: Se implementó una navegación con flechas para mostrar solo cuatro productos a la vez y desplazarlos con animaciones.
+✔ Animaciones de desplazamiento: Se agregó una transición suave al cambiar entre grupos de productos.
+✔ Resaltado de productos: Ahora, los productos se resaltan con un borde rojo cuando el usuario pasa el mouse sobre ellos.
+✔ Refactorizacion en la estructura de la lista de productos: Se modifico la manera de mostrar los propductos para evitar codigo repetido, haciendo uso de la directiva *ngFor
+✔ Lista de clientes: Se agrego una lista de clientes que actualiza el gasto de cada uno en tiempo real, ademas de su estado vip (en caso de gastar mas de $10.000 pasa a ser usuario vip)
+✔ Detalle del producto: Se agrego tanto el nombre como el precio del producto dentro del cuadro donde se visualiza
 
 ---
 
